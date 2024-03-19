@@ -99,7 +99,7 @@ public struct PWV2 {
         let outList = try OutList(options: OutListOptions(action: actions))
         
         let msgInner = try CellBuilder()
-            .storeUInt(BigUInt(1000 + timeout), 64)
+            .storeUInt(BigUInt(UInt64(Date().toSeconds()) + timeout), 64)
             .storeUInt(BigUInt(seqno), 16)
             .storeRef(outList.cell())
             .cell()
