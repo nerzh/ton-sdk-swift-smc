@@ -27,7 +27,10 @@ final class TTests: XCTestCase {
     let publicKey: String = "..."
     let secretKey: String = "..."
     let apiKey: String = "..."
-    
+
+
+
+    /// HighloadWalletV2
     func testHighloadWalletV2() async throws {
         let api = ToncenterApi(apiKey: apiKey, protocol: .https)
         let wallet = try HighloadWalletV2(publicKey: publicKey.hexToBytes())
@@ -59,7 +62,10 @@ final class TTests: XCTestCase {
         let out = try await api.jsonRpc().send(boc: boc)
         print("result:", out.result?.toJSON() ?? "", "error:", out.error ?? "")
     }
-    
+
+
+
+    /// WalletV3    
     func testWalletV3() async throws {
         let api = ToncenterApi(apiKey: apiKey, protocol: .https)
         let wallet = try WalletV3(pubkey: publicKey.hexToBytes())
@@ -102,7 +108,10 @@ final class TTests: XCTestCase {
         let out = try await api.jsonRpc().send(boc: boc)
         print("result:", out.result?.toJSON() ?? "", "error:", out.error ?? "")
     }
-    
+
+
+
+    /// WalletV4
     func testWalletV4() async throws {
         let api = ToncenterApi(apiKey: apiKey, protocol: .https)
         let wallet = try WalletV4(pubkey: publicKey.hexToBytes())
