@@ -19,6 +19,8 @@ Install ton-sdk-swift-smc:
 
 ```swift
 import TonSdkSwiftSmc
+import BigInt
+import SwiftExtensionsPack
 import XCTest
 
 final class TTests: XCTestCase {
