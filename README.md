@@ -13,7 +13,7 @@ Swift library for interaction with TON (The Open Network) smart contract
 
 Install ton-sdk-swift-smc:
 
-- `.package(url: "https://github.com/nerzh/ton-sdk-swift-smc", .upToNextMajor(from: "0.0.1")),`
+- `.package(url: "https://github.com/nerzh/ton-sdk-swift-smc", .upToNextMajor(from: "1.0.0")),`
 
 ## Example
 
