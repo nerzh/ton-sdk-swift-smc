@@ -17,8 +17,6 @@ GNU Lesser General Public License for more details.
 
   You should have received a copy of the GNU Lesser General Public License
                                     along with ton-sdk-swift-smc. If not, see <https://www.gnu.org/licenses/>.
-
-
 */
 
 import Foundation
@@ -31,28 +29,44 @@ public struct PWV2Transfer {
     public var value: Coins
     public var mode: UInt8
     public var body: Cell?
-    public var initOptions: StateInit?
+    public var stateInit: StateInit?
     
-    public init(destination: Address, bounce: Bool, value: Coins, mode: UInt8, body: Cell? = nil, initOptions: StateInit? = nil) {
+    public init(destination: Address, bounce: Bool, value: Coins, mode: UInt8, body: Cell? = nil, stateInit: StateInit? = nil) {
         self.destination = destination
         self.bounce = bounce
         self.value = value
         self.mode = mode
         self.body = body
-        self.initOptions = initOptions
+        self.stateInit = stateInit
     }
 }
 
 
 public struct PWV2 {
-    public var code: Cell
-    public var pubkey: Data
-    public var initOptions: StateInit
-    public var address: Address
+    /*
+     The source code and LICENSE of the "ton-preprocessed-wallet-v2":
+     https://github.com/pyAndr3w/ton-preprocessed-wallet-v2
+
+    "PWV2_CODE = ..." is a compiled version (byte code) of
+    the "ton-preprocessed-wallet-v2" in the bag of cells
+    serialization in hexadecimal representation.
+
+    code cell hash(sha256): 45EBBCE9B5D235886CB6BFE1C3AD93B708DE058244892365C9EE0DFE439CB7B5
+
+    Respect the rights of open source software. Thanks!
+    If you notice copyright violation, please create an issue.
+    https://github.com/nerzh/ton-sdk-swift-smc/issues
+    */
+    public let PWV2_CODE: String = "B5EE9C7241010101003D000076FF00DDD40120F90001D0D33FD30FD74CED44D0D3FFD70B0F20A4830FA90822C8CBFFCB0FC9ED5444301046BAF2A1F823BEF2A2F910F2A3F800ED552E766412"
+
+    public let code: Cell
+    public let pubkey: Data
+    public let initOptions: StateInit
+    public let address: Address
     
     public init(pubkey: Data, wc: Int = 0) throws {
         self.pubkey = pubkey
-        guard let code = try Serializer.deserialize(data: PWV2_CODE.lowercased().hexToBytes()).first else {
+        guard let code = try Boc.deserialize(data: PWV2_CODE.lowercased().hexToBytes()).first else {
             throw ErrorTonSdkSwiftSmc("Code must be valid")
         }
         self.code = code
@@ -90,7 +104,7 @@ public struct PWV2 {
             ))
             let action = try OutAction.actionSendMsg(OutAction.ActionSendMsg(
                 mode: transfer.mode,
-                outMsg: Message(options: MessageOptions(info: info, initOptions: transfer.initOptions, body: transfer.body))
+                outMsg: Message(options: MessageOptions(info: info, stateInit: transfer.stateInit, body: transfer.body))
             ))
             
             actions.append(action)
@@ -113,12 +127,12 @@ public struct PWV2 {
         
         let info = CommonMsgInfo.extInMsgInfo(CommonMsgInfo.ExtInMsgInfo(dest: address))
         
-        let initOptions = isInit ? self.initOptions : nil
+        let stateInit = isInit ? self.initOptions : nil
         
         return try Message(
             options: MessageOptions(
                 info: info,
-                initOptions: initOptions,
+                stateInit: stateInit,
                 body: msgBody
             )
         )
@@ -131,6 +145,6 @@ public struct PWV2 {
             .cell()
         
         let options = StateInitOptions(code: code, data: data)
-        return try StateInit(stateInitOptions: options)
+        return try StateInit(options: options)
     }
 }

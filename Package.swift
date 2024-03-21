@@ -27,7 +27,7 @@ import PackageDescription
 let name: String = "TonSdkSwiftSmc"
 
 var packageDependencies: [Package.Dependency] = [
-    .package(url: "https://github.com/nerzh/ton-sdk-swift.git", .upToNextMajor(from: "0.0.1")),
+    .package(url: "https://github.com/nerzh/ton-sdk-swift.git", .upToNextMajor(from: "1.0.0")),
     .package(url: "https://github.com/nerzh/swift-extensions-pack.git", .upToNextMajor(from: "1.19.1")),
 ]
 
