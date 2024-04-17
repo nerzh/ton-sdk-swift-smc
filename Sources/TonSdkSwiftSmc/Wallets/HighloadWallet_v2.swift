@@ -106,7 +106,6 @@ public struct HighloadWalletV2 {
                 serializers: (
                     key: { number in
                         let bits = try CellBuilder().storeInt(number, 16).bits
-                        print("bits:", bits.description)
                         return bits
                     },
                     value: { transfer in
