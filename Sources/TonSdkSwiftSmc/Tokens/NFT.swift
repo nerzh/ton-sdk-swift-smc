@@ -32,7 +32,7 @@ public struct NFT {
                        custom_payload:(Maybe ^Cell) forward_amount:(VarUInteger 16)
                        forward_payload:(Either Cell ^Cell) = InternalMsgBody;
     */
-    static func buildTransfer(
+    public static func buildTransfer(
         queryId: UInt64,
         newOwner: Address,
         responseDestination: Address,

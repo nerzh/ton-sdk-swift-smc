@@ -33,7 +33,7 @@ public struct Jetton {
                       forward_ton_amount:(VarUInteger 16) forward_payload:(Either Cell ^Cell)
                       = InternalMsgBody;
     */
-    static func buildTransfer(
+    public static func buildTransfer(
         queryId: UInt64,
         amount: Coins,
         destination: Address,
@@ -67,7 +67,7 @@ public struct Jetton {
                    response_destination:MsgAddress custom_payload:(Maybe ^Cell)
                    = InternalMsgBody;
     */
-    static func buildBurn(queryId: UInt64, amount: Coins, responseDestination: Address, customPayload: Cell? = nil) throws -> Cell {
+    public static func buildBurn(queryId: UInt64, amount: Coins, responseDestination: Address, customPayload: Cell? = nil) throws -> Cell {
         let body = try CellBuilder()
             .storeUInt(0x595f07bc, 32)
             .storeUInt(BigUInt(queryId), 64)
