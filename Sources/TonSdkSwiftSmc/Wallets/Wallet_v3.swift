@@ -130,10 +130,10 @@ public struct WalletV3 {
         return try Message(options: MessageOptions(info: info, stateInit: initT, body: bodyCell))
     }
     
-    public func buildTransfer(transfers: [WalletV3Transfer], seqno: UInt32, privateKey: String, isInit: Bool = false, timeout: UInt = 60) throws -> Message {
-        try buildTransfer(transfers: transfers, seqno: seqno, privateKey: privateKey.hexToBytes(), isInit: isInit, timeout: timeout)
+    public func buildTransfer(transfers: [WalletV3Transfer], seqno: UInt32, privateKey: String, isInit: Bool = false, validUntil: UInt = Date().toSeconds() + 60) throws -> Message {
+        try buildTransfer(transfers: transfers, seqno: seqno, privateKey: privateKey.hexToBytes(), isInit: isInit, validUntil: validUntil)
     }
-
+    
     private static func buildStateInit(code: Cell, pubkey: Data, subWalletId: UInt32) throws -> StateInit {
         let data = try CellBuilder()
             .storeUInt(0, 32)
