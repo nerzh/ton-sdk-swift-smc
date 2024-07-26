@@ -89,10 +89,10 @@ public struct PWV2 {
         isInit: Bool = false,
         validUntil: UInt64 = UInt64(Date().toSeconds()) + 60
     ) throws -> Message {
-        if !(transfers.count > 0 && !transfers.isEmpty) {
-            throw ErrorTonSdkSwiftSmc("Transfers must be an array of PWV2Transfer")
+        if transfers.isEmpty {
+            throw ErrorTonSdkSwiftSmc("Transfers must be not empty array of PWV2Transfer")
         }
-        if !(transfers.count <= 255) {
+        if transfers.count > 255 {
             throw ErrorTonSdkSwiftSmc("PWV2 can handle only 255 transfers at once")
         }
         
