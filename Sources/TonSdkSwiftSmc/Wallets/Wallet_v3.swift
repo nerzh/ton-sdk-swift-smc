@@ -24,6 +24,7 @@ GNU Lesser General Public License for more details.
 import Foundation
 import TonSdkSwift
 import BigInt
+import SwiftExtensionsPack
 
 public struct WalletV3Transfer {
     public var destination: Address
@@ -90,14 +91,20 @@ public struct WalletV3 {
         return (seqno: UInt32(seqno), subWalletId: UInt32(subWalletId), pubkey: pubkey)
     }
 
-    public func buildTransfer(transfers: [WalletV3Transfer], seqno: UInt32, privateKey: Data, isInit: Bool = false, timeout: UInt = 60) throws -> Message {
+    public func buildTransfer(
+        transfers: [WalletV3Transfer],
+        seqno: UInt32,
+        privateKey: Data,
+        isInit: Bool = false,
+        validUntil: UInt = Date().toSeconds() + 60
+    ) throws -> Message {
         if transfers.count > 4 {
             throw ErrorTonSdkSwiftSmc("Wallet v3 can handle only 4 transfers at once")
         }
 
         let body = try CellBuilder()
             .storeUInt(BigUInt(subWalletId), 32)
-            .storeUInt(BigUInt(Date().toSeconds() + timeout), 32)
+            .storeUInt(BigUInt(validUntil), 32)
             .storeUInt(BigUInt(seqno), 32)
 
         for transfer in transfers {

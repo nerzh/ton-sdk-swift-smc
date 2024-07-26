@@ -78,24 +78,23 @@ public struct HighloadWalletV2 {
         self.address = try Address(address: "\(workchain):\(stateInit.cell().hash())")
     }
 
-    private static func generateQueryId(timeout: UInt32, randomId: UInt32? = nil) -> UInt64 {
-        let now = UInt64(Date().toSeconds())
+    private static func generateQueryId(validUntil: UInt32, randomId: UInt32? = nil) -> UInt64 {
         let random = randomId ?? UInt32(randomUInt(min: 0, max: UInt((2 ** 32) - 1)))
-        return (now + UInt64(timeout)) << 32 | UInt64(random)
+        return UInt64(validUntil) << 32 | UInt64(random)
     }
 
     public func buildTransfer(
         transfers: [HighloadWalletTransfer],
         secret32Byte: Data,
         isInit: Bool = false,
-        timeout: UInt32 = 60,
+        validUntil: UInt32 = UInt32(Date().toSeconds()) + 60,
         queryId: UInt64? = nil
     ) throws -> Message {
         if transfers.isEmpty || transfers.count > 254 {
             throw ErrorTonSdkSwiftSmc("ContractHighloadWalletV2: can make only 1 to 254 transfers per operation.")
         }
 
-        let queryId = queryId ?? HighloadWalletV2.generateQueryId(timeout: timeout)
+        let queryId = queryId ?? HighloadWalletV2.generateQueryId(validUntil: validUntil)
         let body = try CellBuilder()
             .storeUInt(BigUInt(subWalletId), 32)
             .storeUInt(BigUInt(queryId), 64)

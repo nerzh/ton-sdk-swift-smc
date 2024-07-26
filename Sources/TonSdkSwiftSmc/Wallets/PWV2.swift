@@ -22,6 +22,7 @@ GNU Lesser General Public License for more details.
 import Foundation
 import TonSdkSwift
 import BigInt
+import SwiftExtensionsPack
 
 public struct PWV2Transfer {
     public var destination: Address
@@ -86,7 +87,7 @@ public struct PWV2 {
         seqno: UInt16,
         secretKey32byte: Data,
         isInit: Bool = false,
-        timeout: UInt64 = 60
+        validUntil: UInt64 = UInt64(Date().toSeconds()) + 60
     ) throws -> Message {
         if !(transfers.count > 0 && !transfers.isEmpty) {
             throw ErrorTonSdkSwiftSmc("Transfers must be an array of PWV2Transfer")
@@ -113,7 +114,7 @@ public struct PWV2 {
         let outList = try OutList(options: OutListOptions(action: actions))
         
         let msgInner = try CellBuilder()
-            .storeUInt(BigUInt(UInt64(Date().toSeconds()) + timeout), 64)
+            .storeUInt(BigUInt(validUntil), 64)
             .storeUInt(BigUInt(seqno), 16)
             .storeRef(outList.cell())
             .cell()
